@@ -14,7 +14,7 @@ export default function Posts() {
     <>
       {[...feed].reverse().map((feed) =>{
         return (
-          <Post key={feed.userId} {...feed} />
+          <Post key={feed.postId} {...feed} />
         )
       })}
     </>

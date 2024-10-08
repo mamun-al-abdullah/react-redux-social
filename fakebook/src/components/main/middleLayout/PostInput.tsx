@@ -13,6 +13,7 @@ export default function PostInput() {
     const handlePostInput = () => {
         dispatch(addToFeed(
             {
+                postId: generateRandomId(9999,9999999999),
                 userId: generateRandomId(9999,9999999999),
                 name:"me",
                 avatar:"assets/images/post_img.png",
@@ -21,7 +22,7 @@ export default function PostInput() {
                 status: inputVal || '',
                 imgUrl:"assets/images/timeline_img.png",
                 likes: 0,
-                comments: 0,
+                comments: [],
                 shares: 0,
             }
         ))
