@@ -13,17 +13,6 @@ export type TsinglePostInfo = {
         shares? : number,
 }
 
-export type TsingleCommentInfo = {
-    userId: number,
-    name : string,
-    avatar : string,
-    timeStamp : number,
-    comment : string,
-    likes? : number,
-    commentsOfComment? : number,
-    shares? : number,
-}
-
 
 export default function Post({ name, avatar, timeStamp, privacy, status, imgUrl, likes, comments, shares} : TsinglePostInfo) {
     //format timeStamp as per requirement...
