@@ -10,7 +10,7 @@ export default function Main() {
         <div className="container _custom_container">
 				<div className="_layout_inner_wrap">
 					<div className="row">
-                        <LeftSidebar/>
+            <LeftSidebar/>
 						<MiddleLayout/>
 						<RightSidebar/>
 				</div>

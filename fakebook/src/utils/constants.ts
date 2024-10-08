@@ -1,0 +1,1 @@
+export const ClocalStorageFeedData = 'LOCAL_STORAGE_FEED_DATA'
