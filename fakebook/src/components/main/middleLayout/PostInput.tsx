@@ -11,17 +11,22 @@ export default function PostInput() {
     const dispatch = useDispatch()
 
     const handlePostInput = () => {
+        const postId = generateRandomId(9999,9999999999)
+        const userId = 1
+        const avatar = "https://picsum.photos/80"
+
+    
         dispatch(addToFeed(
             {
-                postId: generateRandomId(9999,9999999999),
-                userId: generateRandomId(9999,9999999999),
+                postId,
+                userId,
                 name:"me",
-                avatar:"assets/images/post_img.png",
+                avatar,
                 timeStamp:new Date().getTime()-5000,
                 privacy:"Public",
                 status: inputVal || '',
                 imgUrl:"assets/images/timeline_img.png",
-                likes: 0,
+                likes: [],
                 comments: [],
                 shares: 0,
             }

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import {getTimeElapsed } from "../../../utils/commonUtils";
 import { useDispatch } from "react-redux";
-import { addToComment } from "../../../features/feedSlice";
+import { addToLike, addToComment } from "../../../features/feedSlice";
 
 export type TsinglePostInfo = {
     postId: number,
@@ -14,11 +14,16 @@ export type TsinglePostInfo = {
     privacy : 'Private' | 'Public',
     status? : string,
     imgUrl? : string,
-    likes? : number,
+    likes? : TsingleLikeInfo[],
     comments? : TsingleCommentInfo[],
     shares? : number,
 }
 
+export type TsingleLikeInfo = {
+    postId: number,
+    userId: number,
+    avatar : string,
+}
 export type TsingleCommentInfo = {
     postId: number,
     userId: number,
@@ -32,8 +37,19 @@ export type TsingleCommentInfo = {
 }
 
 
-export default function Post({postId, name, avatar, timeStamp, privacy, status, imgUrl, likes, comments, shares} : TsinglePostInfo) {
+export default function Post({ postId, name, avatar, timeStamp, privacy, status, imgUrl, likes, comments, shares} : TsinglePostInfo) {
     const [inputVal, setInputVal] = useState('')
+
+    const likesArr = likes && likes.length > 0 ? likes : [];
+
+    const loggedInUserId = 1 
+    const loggedInUserAvatar = 'https://picsum.photos/80'
+    // assuming current user id
+    let reacted = false
+    if(likesArr.some(like => like.userId === loggedInUserId)){
+        reacted = true
+    }
+
 
     const commentsArr = comments && comments.length > 0 ? comments : [];
     const lastComment = commentsArr[commentsArr.length - 1];
@@ -47,7 +63,7 @@ export default function Post({postId, name, avatar, timeStamp, privacy, status, 
     const handleCommentInput = () => {
         dispatch(addToComment({
             postId,
-            userId: 1, // assuming logged in user id
+            userId: loggedInUserId,
             name: 'me',
             avatar,
             timeStamp: new Date().getTime(),
@@ -58,6 +74,15 @@ export default function Post({postId, name, avatar, timeStamp, privacy, status, 
         }))
         
         setInputVal('')
+    }
+
+
+    const handleReactionToPost = () => {
+            dispatch(addToLike({
+                postId,
+                userId: loggedInUserId,
+                avatar: loggedInUserAvatar,
+            }))
     }
 
 
@@ -160,12 +185,16 @@ export default function Post({postId, name, avatar, timeStamp, privacy, status, 
             </div>
             <div className="_feed_inner_timeline_total_reacts _padd_r24 _padd_l24 _mar_b26">
                 <div className="_feed_inner_timeline_total_reacts_image">
-                    <img src="assets/images/react_img1.png" alt="Image" className="d-none _react_img1"/>
-                    <img src="assets/images/react_img2.png" alt="Image" className="d-none _react_img"/>
-                    <img src="assets/images/react_img3.png" alt="Image" className="d-none _react_img _rect_img_mbl_none"/>
-                    <img src="assets/images/react_img4.png" alt="Image" className="d-none _react_img _rect_img_mbl_none"/>
-                    <img src="assets/images/react_img5.png" alt="Image" className="d-none _react_img _rect_img_mbl_none"/>
-                    <p className="_feed_inner_timeline_total_reacts_para">{likes||0}</p>
+                    {likesArr.length> 0 ? likesArr.map((likeObj, index)=>{
+                        if (index < 5) {
+                        return <img key={likeObj.userId} src={likeObj.avatar} alt="Image" className="_react_img _rect_img_mbl_none"/>
+                        }
+                    })
+                    :
+                         null
+                    }
+                    <p className={`_feed_inner_timeline_total_reacts_para${likesArr.length == 0 ? ' d-none' : ''}`}>{likesArr.length>9? '9+': likesArr.length}</p>
+                    <p className={`_social_login_bottom_txt_para${likesArr.length > 0 ? ' d-none': ''}`}>No reaction</p>
                 </div>
                 <div className="_feed_inner_timeline_total_reacts_txt">
                     <p className="_feed_inner_timeline_total_reacts_para1">
@@ -175,7 +204,7 @@ export default function Post({postId, name, avatar, timeStamp, privacy, status, 
                 </div>
             </div>
             <div className="_feed_inner_timeline_reaction">
-                <button className="_feed_inner_timeline_reaction_emoji _feed_reaction _feed_reaction_active">
+                <button onClick={handleReactionToPost} className={`_feed_inner_timeline_reaction_emoji _feed_reaction${reacted?' _feed_reaction_active' : ''}`}>
                     <span className="_feed_inner_timeline_reaction_link"> <span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="none" viewBox="0 0 19 19">
                             <path fill="#FFCC4D" d="M9.5 19a9.5 9.5 0 100-19 9.5 9.5 0 000 19z"/>
@@ -235,7 +264,7 @@ export default function Post({postId, name, avatar, timeStamp, privacy, status, 
             </div>
             <div className={`_timline_comment_main${commentsArr.length > 0 ? '': ' d-none'}`}>
                 <div className="_previous_comment">
-                    <button type="button" className={`_previous_comment_txt${commentsArr.length > 1 ? '': ' d-none'}`}>View {commentsArr.length-1} previous comments</button>
+                    <button type="button" className={`_previous_comment_txt${commentsArr.length == 0 ? ' d-none' : ''}`}>View {commentsArr.length-1} previous comments</button>
                 </div>
                 {commentsArr.length> 0
                 ?
