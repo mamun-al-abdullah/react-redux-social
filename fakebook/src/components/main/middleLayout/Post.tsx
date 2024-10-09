@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import {getTimeElapsed } from "../../../utils/commonUtils";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToLike, addToComment } from "../../../features/feedSlice";
 
 export type TsinglePostInfo = {
@@ -37,13 +37,18 @@ export type TsingleCommentInfo = {
 }
 
 
-export default function Post({ postId, name, avatar, timeStamp, privacy, status, imgUrl, likes, comments, shares} : TsinglePostInfo) {
+export default function Post({postId, name, avatar, timeStamp, privacy, status, imgUrl, likes, comments, shares} : TsinglePostInfo) {
     const [inputVal, setInputVal] = useState('')
-
+    
+    const account = useSelector(state=> state.feed.account)
+    // console.log(account);
+    
+    
     const likesArr = likes && likes.length > 0 ? likes : [];
 
-    const loggedInUserId = 1 
-    const loggedInUserAvatar = 'https://picsum.photos/80'
+    const loggedInUserId = account.userId
+    const loggedInUserAvatar = account.avatar
+
     // assuming current user id
     let reacted = false
     if(likesArr.some(like => like.userId === loggedInUserId)){
@@ -64,8 +69,8 @@ export default function Post({ postId, name, avatar, timeStamp, privacy, status,
         dispatch(addToComment({
             postId,
             userId: loggedInUserId,
-            name: 'me',
-            avatar,
+            name: 'Me',
+            avatar : loggedInUserAvatar,
             timeStamp: new Date().getTime(),
             comment: inputVal,
             likes: 0,

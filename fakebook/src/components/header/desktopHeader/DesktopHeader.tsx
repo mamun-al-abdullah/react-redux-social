@@ -1,7 +1,9 @@
 // import React from 'react'
+import { useSelector } from 'react-redux'
 import logo from '../../../assets/images/logo.svg'
 
 export default function DesktopHeader() {
+	const {avatar, name} = useSelector(state=> state.feed.account)
   return (
     <div>
         <nav className="navbar navbar-expand-lg navbar-light _header_nav _padd_t10">
@@ -420,10 +422,10 @@ export default function DesktopHeader() {
 						</ul>
 						<div className="_header_nav_profile">
 							<div className="_header_nav_profile_image">
-								<img src="assets/images/profile.png" alt="Image" className="_nav_profile_img"/>
+								<img src={avatar} alt="Image" className="_nav_profile_img"/>
 							</div>
 							<div className="_header_nav_dropdown">
-								<p className="_header_nav_para">Dylan Field</p>
+								<p className="_header_nav_para">{name}</p>
 								<button id="_profile_drop_show_btn" className="_header_nav_dropdown_btn _dropdown_toggle" type="button">
 									<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" fill="none" viewBox="0 0 10 6">
 										<path fill="#112032" d="M5 5l.354.354L5 5.707l-.354-.353L5 5zm4.354-3.646l-4 4-.708-.708 4-4 .708.708zm-4.708 4l-4-4 .708-.708 4 4-.708.708z" />
@@ -434,10 +436,10 @@ export default function DesktopHeader() {
 							<div id="_prfoile_drop" className="_nav_profile_dropdown _profile_dropdown">
 								<div className="_nav_profile_dropdown_info">
 									<div className="_nav_profile_dropdown_image">
-										<img src="assets/images/profile.png" alt="Image" className="_nav_drop_img"/>
+										<img src={avatar} alt="Image" className="_nav_drop_img"/>
 									</div>
 									<div className="_nav_profile_dropdown_info_txt">
-										<h4 className="_nav_dropdown_title">Dylan Field</h4>
+										<h4 className="_nav_dropdown_title">{name}</h4>
 										<a href="profile.html" className="_nav_drop_profile">
 											View Profile
 										</a>
