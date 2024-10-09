@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { TsinglePostInfo } from '../components/main/middleLayout/Post'
+import { TsingleCommentInfo, TsinglePostInfo } from '../components/main/middleLayout/Post'
 import { ClocalStorageFeedData } from '../utils/constants'
 
 type Tfeed = TsinglePostInfo[]
@@ -126,8 +126,17 @@ const feedSlice = createSlice({
       state.push(action.payload)
       localStorage.setItem(ClocalStorageFeedData, JSON.stringify(state))
     },
+    addToComment(state, action: PayloadAction<TsingleCommentInfo>) {
+        const index = state.findIndex((post) => post.postId === action.payload.postId)
+        if (index === -1) return;
+        if (!state[index].comments) {
+            state[index].comments = [];
+        }
+        state[index].comments.push(action.payload)
+        localStorage.setItem(ClocalStorageFeedData, JSON.stringify(state))
+    },
   },
 })
 
-export const { addToFeed} = feedSlice.actions
+export const { addToFeed, addToComment} = feedSlice.actions
 export default feedSlice.reducer

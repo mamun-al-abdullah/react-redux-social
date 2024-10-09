@@ -15,8 +15,10 @@ export function getTimeElapsed(givenTime : Date): string {
     const months = Math.floor(days / 30.44); // Approximate number of days in a month
     const years = Math.floor(months / 12);
   
-    if (seconds < 60) {
-      return `${seconds} seconds ago`;
+    if (seconds < 10) {
+      return `Now`;
+    }else if (seconds < 60) {
+      return `Few seconds ago`;
     } else if (minutes < 60) {
       return `${minutes} minutes ago`;
     } else if (hours < 24) {

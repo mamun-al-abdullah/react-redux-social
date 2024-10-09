@@ -1,6 +1,9 @@
 // import React from 'react'
 
+import { useState } from "react";
 import {getTimeElapsed } from "../../../utils/commonUtils";
+import { useDispatch } from "react-redux";
+import { addToComment } from "../../../features/feedSlice";
 
 export type TsinglePostInfo = {
     postId: number,
@@ -29,13 +32,41 @@ export type TsingleCommentInfo = {
 }
 
 
-export default function Post({ name, avatar, timeStamp, privacy, status, imgUrl, likes, comments, shares} : TsinglePostInfo) {
+export default function Post({postId, name, avatar, timeStamp, privacy, status, imgUrl, likes, comments, shares} : TsinglePostInfo) {
+    const [inputVal, setInputVal] = useState('')
 
     const commentsArr = comments && comments.length > 0 ? comments : [];
     const lastComment = commentsArr[commentsArr.length - 1];
-
+    
     //format timeStamp as per requirement...
     const formattedTime = getTimeElapsed(new Date(timeStamp));
+
+
+    const dispatch = useDispatch()
+
+    const handleCommentInput = () => {
+        dispatch(addToComment({
+            postId,
+            userId: 1, // assuming logged in user id
+            name: 'me',
+            avatar,
+            timeStamp: new Date().getTime(),
+            comment: inputVal,
+            likes: 0,
+            commentsOfComment: lastComment?.commentsOfComment || 0,
+            shares: 0,
+        }))
+        
+        setInputVal('')
+    }
+
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter' && e.shiftKey) {
+          e.preventDefault();
+          handleCommentInput();
+        }
+      };
 
 
   return (
@@ -122,7 +153,7 @@ export default function Post({ name, avatar, timeStamp, privacy, status, imgUrl,
                         </div>
                     </div>
                 </div>
-                <h4 style={{whiteSpace: "pre-wrap"}} className="_feed_inner_timeline_post_title">{status}</h4>
+                <h4 style={{whiteSpace: "pre-line"}} className="_feed_inner_timeline_post_title">{status}</h4>
                 <div className="_feed_inner_timeline_image">
                     <img src={imgUrl} alt="" className="_time_img"/>
                 </div>
@@ -184,7 +215,7 @@ export default function Post({ name, avatar, timeStamp, privacy, status, imgUrl,
                                 <img src="assets/images/comment_img.png" alt="" className="_comment_img"/>
                             </div>
                             <div className="_feed_inner_comment_box_content_txt">
-                                <textarea className="form-control _comment_textarea" placeholder="Write a comment" id="floatingTextarea2"></textarea>
+                                <textarea onChange={e=>{setInputVal(e.target.value)}} onKeyDown={handleKeyDown} value={inputVal} className="form-control _comment_textarea" placeholder="Write a comment" id="floatingTextarea2"></textarea>
                             </div>
                         </div>
                         <div className="_feed_inner_comment_box_icon">
@@ -202,9 +233,9 @@ export default function Post({ name, avatar, timeStamp, privacy, status, imgUrl,
                     </form>
                 </div>
             </div>
-            <div className={`_timline_comment_main${commentsArr.length > 0 ? ' ': ' d-none'}`}>
+            <div className={`_timline_comment_main${commentsArr.length > 0 ? '': ' d-none'}`}>
                 <div className="_previous_comment">
-                    <button type="button" className={`_previous_comment_txt${commentsArr.length > 1 ? ' ': ' d-none'}`}>View {commentsArr.length-1} previous comments</button>
+                    <button type="button" className={`_previous_comment_txt${commentsArr.length > 1 ? '': ' d-none'}`}>View {commentsArr.length-1} previous comments</button>
                 </div>
                 {commentsArr.length> 0
                 ?
@@ -224,7 +255,7 @@ export default function Post({ name, avatar, timeStamp, privacy, status, imgUrl,
                                 </div>
                             </div>
                             <div className="_comment_status">
-                                <p className="_comment_status_text"><span> {lastComment.comment} </span></p>
+                                <p className="_comment_status_text"><span style={{whiteSpace: "pre-line"}}> {lastComment.comment.trim()} </span></p>
                             </div>
                             <div className="_total_reactions">
                                 <div className="_total_react">
