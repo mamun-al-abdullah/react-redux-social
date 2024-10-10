@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { TsingleCommentInfo, TsingleLikeInfo, TsinglePostInfo } from '../components/main/middleLayout/Post'
+import { TsingleCommentInfo, TsingleInnermostCommentInfo, TsingleLikeInfo, TsinglePostInfo } from '../components/main/middleLayout/Post'
 import { ClocalStorageFeedData } from '../utils/constants'
 
 export type Tfeed = {
@@ -52,6 +52,7 @@ let initialState = {
                 {
                     postId: 1,
                     userId: 2,
+                    commentId : 1,
                     name:"other",
                     avatar:"https://picsum.photos/200",
                     timeStamp:new Date().getTime()-4000,
@@ -61,6 +62,7 @@ let initialState = {
                 {
                     postId: 1,
                     userId: 3,
+                    commentId : 2,
                     name:"another",
                     avatar:"https://picsum.photos/100",
                     timeStamp:new Date().getTime()-3000,
@@ -94,7 +96,8 @@ let initialState = {
                 {
                     postId: 2,
                     userId: 5,
-                    name:"me",
+                    commentId : 1,
+                    name:"user5",
                     avatar:"https://picsum.photos/80",
                     timeStamp:new Date().getTime()-4000,
                     comment:"I agree with you!",
@@ -103,6 +106,7 @@ let initialState = {
                 {
                     postId: 2,
                     userId: 6,
+                    commentId : 2,
                     name:"another",
                     avatar:"https://picsum.photos/100",
                     timeStamp:new Date().getTime()-3000,
@@ -111,7 +115,8 @@ let initialState = {
                 {
                     postId: 2,
                     userId: 5,
-                    name:"me",
+                    commentId : 3,
+                    name:"user5",
                     avatar:"https://picsum.photos/80",
                     timeStamp:new Date().getTime()-3000,
                     comment:"I'm glad to hear that!",
@@ -202,18 +207,43 @@ let initialState = {
                 {
                     postId: 4,
                     userId: 13,
+                    commentId: 3,
                     name:"other",
                     avatar:"https://picsum.photos/200",
                     timeStamp:new Date().getTime()-4000,
                     comment:"I agree with you!",
                     likes: 3,
+                    innerMostComments : [
+                        {
+                            postId: 4,
+                            userId: 1,
+                            commentId: 3,
+                            innerMostCommentId : 1,
+                            name:"me",
+                            avatar:"assets/images/slider3.png",
+                            timeStamp:new Date().getTime()-3000,
+                            comment:"inner most comment with my id from redux store!",
+                            likes: 3,
+                        },
+                        {
+                            postId: 4,
+                            userId: 14,
+                            commentId: 3,
+                            innerMostCommentId : 2,
+                            name:"another",
+                            avatar:"https://picsum.photos/100",
+                            timeStamp:new Date().getTime()-3000,
+                            comment:"inner most comment from redux store!",
+                            likes: 2,
+                        }
+                    ]
                 },
             ],
         },
         ]
 } satisfies Tfeed as Tfeed
 
-const localStorageFeedData = ''//localStorage.getItem(ClocalStorageFeedData);
+const localStorageFeedData = localStorage.getItem(ClocalStorageFeedData);
 
 if(localStorageFeedData){initialState = JSON.parse(localStorageFeedData)}
 
@@ -240,7 +270,7 @@ const feedSlice = createSlice({
                 state.feed[index].likes.splice(likeIndex, 1)
             }
         }
-        // localStorage.setItem(ClocalStorageFeedData, JSON.stringify(state.feed))
+        localStorage.setItem(ClocalStorageFeedData, JSON.stringify(state))
     },
     addToComment(state, action: PayloadAction<TsingleCommentInfo>) {
         const index = state.feed.findIndex((post) => post.postId === action.payload.postId)
@@ -251,8 +281,22 @@ const feedSlice = createSlice({
         state.feed[index].comments.push(action.payload)
         localStorage.setItem(ClocalStorageFeedData, JSON.stringify(state))
     },
+    replytoComment(state, action: PayloadAction<TsingleInnermostCommentInfo>) {
+        const postIndex = state.feed.findIndex((post) => post.postId === action.payload.postId)
+        const selectedPost = state.feed[postIndex]
+        const comments = selectedPost.comments
+        if (!comments) return
+        const commentIndex = comments.findIndex((comment) => comment.commentId === action.payload.commentId)
+        const selectedComment = comments[commentIndex] 
+
+        if (!selectedComment.innerMostComments) {
+            selectedComment.innerMostComments = [];
+        }
+        selectedComment.innerMostComments.push(action.payload)
+        localStorage.setItem(ClocalStorageFeedData, JSON.stringify(state))
+    },
   },
 })
 
-export const { addToFeed, addToLike, addToComment} = feedSlice.actions
+export const { addToFeed, addToLike, addToComment,replytoComment} = feedSlice.actions
 export default feedSlice.reducer
