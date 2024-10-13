@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Tuser } from "../components/main/middleLayout/Post";
 import { register } from "../features/feedSlice";
 import { generateRandomId } from "../utils/commonUtils";
@@ -33,7 +33,7 @@ export default function Registration() {
       return;
     }
 
-    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+    if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       alert("Please enter a valid email address");
       return;
     }

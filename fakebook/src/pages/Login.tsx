@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import { Tuser } from "../components/main/middleLayout/Post";
 import { login } from "../features/feedSlice";
 
@@ -29,7 +29,7 @@ export default function Login() {
       (user: Tuser) => user.email === email && user.password === password
     );
     if (user) {
-        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+        if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
             alert("Please enter a valid email address")
             return
         }
@@ -44,6 +44,10 @@ export default function Login() {
       alert("Invalid email or password");
     }
   };
+
+  const handleGoToRegistration = () => {
+    navigate("/registration");
+  }
 
   return (
     <section className="_social_login_wrapper _layout_main_wrapper">
@@ -189,7 +193,12 @@ export default function Login() {
                     <div className="_social_login_bottom_txt">
                       <p className="_social_login_bottom_txt_para">
                         Dont have an account?{" "}
-                        <Link to="../registration">Create New Account</Link>
+                        <div
+                          style={{ color: "#1890ff", fontSize: 14 }}
+                          onClick={handleGoToRegistration}
+                        >
+                          Create New Account
+                        </div>
                       </p>
                     </div>
                   </div>
