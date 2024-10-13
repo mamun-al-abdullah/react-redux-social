@@ -3,6 +3,11 @@ import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter} from 'react-router-dom'
+import Login from './pages/Login.tsx'
+import Registration from './pages/Registration.tsx'
+import { Provider } from 'react-redux'
+import { store } from './store/store'
+
 
 const router = createBrowserRouter(
   [
@@ -11,19 +16,25 @@ const router = createBrowserRouter(
       element: <App/>
     },
     {
-      path: '/about',
-      element: <h2>About Page</h2>
+      path: '/feed',
+      element: <App/>
     },
     {
-      path: '/contact',
-      element: <h2>Contact Page</h2>
+      path: '/login',
+      element: <Login/>
     },
-    // Add more routes as needed
+    {
+      path: '/registration',
+      element: <Registration/>
+    }
   ]
 )
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+    <Provider store={store}>
+     <RouterProvider router={router}/>
+    </Provider>
   </StrictMode>,
 )
 

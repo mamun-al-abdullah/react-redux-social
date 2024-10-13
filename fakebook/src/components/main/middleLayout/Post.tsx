@@ -13,6 +13,8 @@ export type Tuser = {
   userId: number,
   name: string,
   avatar: string,
+  email: string,
+  password: string,
 }
 export type TsinglePostInfo = {
   postId: number;
@@ -531,7 +533,7 @@ export default function Post({
           <button
             type="button"
             className={`_previous_comment_txt${
-              commentsArr.length == 0 ? " d-none" : ""
+              commentsArr.length == 1 ? " d-none" : ""
             }`}
           >
             View {commentsArr.length - 1} previous comments

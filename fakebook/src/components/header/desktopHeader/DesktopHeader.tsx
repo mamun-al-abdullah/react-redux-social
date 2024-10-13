@@ -1,9 +1,10 @@
 // import React from 'react'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import logo from "../../../assets/images/logo.svg";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Tuser } from "../../main/middleLayout/Post";
+import { logout } from "../../../features/feedSlice";
 
 export default function DesktopHeader() {
   //name , avatar
@@ -18,6 +19,12 @@ export default function DesktopHeader() {
 
   const handleProfileDropdown = () =>{
 	setShowProfileDropdown(pv=> pv == 'show' ? '' : 'show')
+  }
+
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
   }
 
   return (
@@ -65,10 +72,10 @@ export default function DesktopHeader() {
             </div>
             <ul className="navbar-nav mb-2 mb-lg-0 _header_nav_list ms-auto _mar_r8">
               <li className="nav-item _header_nav_item">
-                <a
+                <Link
                   className="nav-link _header_nav_link_active _header_nav_link"
                   aria-current="page"
-                  href="feed.html"
+                  to="feed"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +101,7 @@ export default function DesktopHeader() {
                       d="M11.857 19.341v-5.857a1 1 0 00-1-1H7.143a1 1 0 00-1 1v5.857"
                     />
                   </svg>
-                </a>
+                </Link>
               </li>
               <li className="nav-item _header_nav_item">
                 <a
@@ -624,7 +631,7 @@ export default function DesktopHeader() {
             </ul>
             <div onClick={handleProfileDropdown} className="_header_nav_profile">
               <div className="_header_nav_profile_image">
-                <img src={avatar} alt="Image" className="_nav_profile_img" />
+                <img style={{borderRadius : '50%'}} src={avatar} alt="Image" className="_nav_profile_img" />
               </div>
               <div className="_header_nav_dropdown">
                 <p className="_header_nav_para">{name}</p>
@@ -747,7 +754,7 @@ export default function DesktopHeader() {
                       </button>
                     </a>
                   </li>
-                  <Link to={'about'} className="_nav_dropdown_list_item">
+                  <Link onClick={handleLogout} to={'login'} className="_nav_dropdown_list_item">
                     <a href="#0" className="_nav_dropdown_link">
                       <div className="_nav_drop_info">
                         <span>

@@ -22,101 +22,141 @@ let initialState = {
             userId: 1,
             name: 'Me',
             avatar: 'assets/images/slider3.png',
+            email: 'me@gmail.com',
+            password: '1234',
         },
         {
             userId: 2,
             name: 'User2',
             avatar: 'https://picsum.photos/40',
+            email: 'user2@gmail.com',
+            password: '1234',
         },
         {
             userId: 3,
             name: 'User3',
             avatar: 'https://picsum.photos/50',
+            email: 'user3@gmail.com',
+            password: '1234',
         },
         {
             userId: 4,
             name: 'User4',
             avatar: 'https://picsum.photos/60',
+            email: 'user4@gmail.com',
+            password: '1234',
         },
         {
             userId: 5,
             name: 'User5',
             avatar: 'https://picsum.photos/70',
+            email: 'user5@gmail.com',
+            password: '1234',
         },
         {
             userId: 6,
             name: 'User6',
             avatar: 'https://picsum.photos/80',
+            email: 'user6@gmail.com',
+            password: '1234',
         },
         {
             userId: 7,
             name: 'User7',
             avatar: 'https://picsum.photos/90',
+            email: 'user7@gmail.com',
+            password: '1234',
         },
         {
             userId: 8,
             name: 'User8',
             avatar: 'https://picsum.photos/100',
+            email: 'user8@gmail.com',
+            password: '1234',
         },
         {
             userId: 9,
             name: 'User9',
             avatar: 'https://picsum.photos/110',
+            email: 'user9@gmail.com',
+            password: '1234',
         },
         {
             userId: 10,
             name: 'User10',
             avatar: 'https://picsum.photos/120',
+            email: 'user10@gmail.com',
+            password: '1234',
         },
         {
             userId: 11,
             name: 'User11',
             avatar: 'https://picsum.photos/130',
+            email: 'user11@gmail.com',
+            password: '1234',
         },
         {
             userId: 12,
             name: 'User12',
             avatar: 'https://picsum.photos/140',
+            email: 'user12@gmail.com',
+            password: '1234',
         },
         {
             userId: 13,
             name: 'User13',
             avatar: 'https://picsum.photos/150',
+            email: 'user13@gmail.com',
+            password: '1234',
         },
         {
             userId: 14,
             name: 'User14',
             avatar: 'https://picsum.photos/160',
+            email: 'user14@gmail.com',
+            password: '1234',
         },
         {
             userId: 15,
             name: 'User15',
             avatar: 'https://picsum.photos/170',
+            email: 'user15@gmail.com',
+            password: '1234',
         },
         {
             userId: 16,
             name: 'User16',
             avatar: 'https://picsum.photos/180',
+            email: 'user16@gmail.com',
+            password: '1234',
         },
         {
             userId: 17,
             name: 'User17',
             avatar: 'https://picsum.photos/190',
+            email: 'user17@gmail.com',
+            password: '1234',
         },
         {
             userId: 18,
             name: 'User18',
             avatar: 'https://picsum.photos/200',
+            email: 'user18@gmail.com',
+            password: '1234',
         },
         {
             userId: 19,
             name: 'User19',
             avatar: 'https://picsum.photos/210',
+            email: 'user19@gmail.com',
+            password: '1234',
         },
         {
             userId: 20,
             name: 'User20',
             avatar: 'https://picsum.photos/220',
+            email: 'user20@gmail.com',
+            password: '1234',
         },
     ],
     feed: [
@@ -354,8 +394,22 @@ const feedSlice = createSlice({
         selectedComment.innerMostComments.push(action.payload)
         localStorage.setItem(ClocalStorageFeedData, JSON.stringify(state))
     },
+    register(state,action : PayloadAction<Tuser>){
+        state.account.isLoggedIn = false
+        state.users.push(action.payload)
+        localStorage.setItem(ClocalStorageFeedData, JSON.stringify(state))
+    },
+    login(state,action : PayloadAction<Tuser>){
+        state.account.userId = action.payload.userId
+        state.account.isLoggedIn = true
+        localStorage.setItem(ClocalStorageFeedData, JSON.stringify(state))
+    },
+    logout(state){
+        state.account.isLoggedIn = false
+        localStorage.setItem(ClocalStorageFeedData, JSON.stringify(state))
+    }
   },
 })
 
-export const { addToFeed, addToLike, addToComment,replytoComment} = feedSlice.actions
+export const { addToFeed, addToLike, addToComment,replytoComment,register, login, logout} = feedSlice.actions
 export default feedSlice.reducer
