@@ -9,11 +9,14 @@ import {
   replytoComment,
 } from "../../../features/feedSlice";
 
+export type Tuser = {
+  userId: number,
+  name: string,
+  avatar: string,
+}
 export type TsinglePostInfo = {
   postId: number;
   userId: number;
-  name: string;
-  avatar: string;
   timeStamp: number;
   privacy: "Private" | "Public";
   status?: string;
@@ -26,14 +29,11 @@ export type TsinglePostInfo = {
 export type TsingleLikeInfo = {
   postId: number;
   userId: number;
-  avatar: string;
 };
 export type TsingleCommentInfo = {
   postId: number;
   userId: number;
   commentId: number;
-  name: string;
-  avatar: string;
   timeStamp: number;
   comment: string;
   likes?: number;
@@ -46,8 +46,6 @@ export type TsingleInnermostCommentInfo = {
   userId: number;
   commentId: number;
   innerMostCommentId: number;
-  name: string;
-  avatar: string;
   timeStamp: number;
   comment: string;
   likes?: number;
@@ -55,8 +53,7 @@ export type TsingleInnermostCommentInfo = {
 
 export default function Post({
   postId,
-  name,
-  avatar,
+  userId,
   timeStamp,
   privacy,
   status,
@@ -68,13 +65,32 @@ export default function Post({
   const [inputVal, setInputVal] = useState("");
   const [innermostInputVal, setInnermostInputVal] = useState("");
 
-  const account = useSelector((state) => state.feed.account);
-  // console.log(account);
+  const { account, users } = useSelector((state) => state.feed);
+  
+  //get avatar and name from account and user
+  const user = users.find((user : Tuser) => user.userId === userId);
+  const name = user?.name || 'User';
+  const avatar = user?.avatar || 'assets/images/user';
+
+
+  //function to get avatar by userId from users
+  const getAvatar = (userId: number) => {
+    const user = users.find((user : Tuser) => user.userId === userId);
+    return user?.avatar || 'assets/images/user';
+  };
+  //function to get avatar by userId from users
+  const getName = (userId: number) => {
+    const user = users.find((user : Tuser) => user.userId === userId);
+    return user?.name || 'User';
+  };
+
+
+
+
 
   const likesArr = likes && likes.length > 0 ? likes : [];
 
   const loggedInUserId = account.userId;
-  const loggedInUserAvatar = account.avatar;
 
   // assuming current user id
   let reacted = false;
@@ -93,7 +109,6 @@ export default function Post({
       addToLike({
         postId,
         userId: loggedInUserId,
-        avatar: loggedInUserAvatar,
       })
     );
   };
@@ -106,8 +121,6 @@ export default function Post({
         postId,
         userId: loggedInUserId,
         commentId: generateRandomId(999, 99999999),
-        name: "Me",
-        avatar: loggedInUserAvatar,
         timeStamp: new Date().getTime(),
         comment: inputVal,
         likes: 0,
@@ -125,8 +138,6 @@ export default function Post({
         userId: loggedInUserId,
         commentId: lastComment.commentId,
         innerMostCommentId: generateRandomId(999, 99999999),
-        name: account.name,
-        avatar: account.avatar,
         timeStamp: new Date().getTime(),
         comment: innermostInputVal,
         likes: 0,
@@ -330,7 +341,7 @@ export default function Post({
                   return (
                     <img
                       key={likeObj.userId}
-                      src={likeObj.avatar}
+                      src={getAvatar(likeObj.userId)}
                       alt="Image"
                       className="_react_img _rect_img_mbl_none"
                     />
@@ -531,7 +542,7 @@ export default function Post({
             <div className="_comment_image">
               <a href="profile.html" className="_comment_image_link">
                 <img
-                  src={lastComment.avatar}
+                  src={getAvatar(lastComment.userId)}
                   alt=""
                   className="_comment_img1"
                 />
@@ -543,7 +554,7 @@ export default function Post({
                   <div className="_comment_name">
                     <a href="profile.html ">
                       <h4 className="_comment_name_title">
-                        {lastComment.name}
+                        {getName(lastComment.userId)}
                       </h4>
                     </a>
                   </div>
@@ -625,7 +636,7 @@ export default function Post({
                     <div className="_comment_image">
                       <a href="profile.html" className="_comment_image_link">
                         <img
-                          src={innerMostComment.avatar}
+                          src={getAvatar(innerMostComment.userId)}
                           alt=""
                           className="_comment_img1"
                         />
@@ -637,7 +648,7 @@ export default function Post({
                           <div className="_comment_name">
                             <a href="profile.html ">
                               <h4 className="_comment_name_title">
-                                {innerMostComment.name}
+                                {getName(innerMostComment.userId)}
                               </h4>
                             </a>
                           </div>

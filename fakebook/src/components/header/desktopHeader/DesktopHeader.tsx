@@ -2,10 +2,19 @@
 import { useSelector } from "react-redux";
 import logo from "../../../assets/images/logo.svg";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Tuser } from "../../main/middleLayout/Post";
 
 export default function DesktopHeader() {
-  const { avatar, name } = useSelector((state) => state.feed.account);
+  //name , avatar
+  const { account, users } = useSelector((state) => state.feed);
   const [showProfileDropdown, setShowProfileDropdown ] = useState('')
+
+  //get avatar from account and users
+  const user = users.find((user : Tuser) => user.userId === account.userId);
+  const name = user?.name || 'User';
+  const avatar = user?.avatar || 'assets/images/user';
+
 
   const handleProfileDropdown = () =>{
 	setShowProfileDropdown(pv=> pv == 'show' ? '' : 'show')
@@ -738,7 +747,7 @@ export default function DesktopHeader() {
                       </button>
                     </a>
                   </li>
-                  <li className="_nav_dropdown_list_item">
+                  <Link to={'about'} className="_nav_dropdown_list_item">
                     <a href="#0" className="_nav_dropdown_link">
                       <div className="_nav_drop_info">
                         <span>
@@ -776,7 +785,7 @@ export default function DesktopHeader() {
                         </svg>
                       </button>
                     </a>
-                  </li>
+                  </Link>
                 </ul>
               </div>
             </div>

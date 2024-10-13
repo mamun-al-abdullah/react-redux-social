@@ -4,25 +4,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToFeed } from "../../../features/feedSlice";
 import { useState } from "react";
 import { generateRandomId } from "../../../utils/commonUtils";
+import { Tuser } from "./Post";
 
 export default function PostInput() {
   const [inputVal, setInputVal] = useState("");
 
-  const account = useSelector((state) => state.feed.account);
+  const { account, users } = useSelector((state) => state.feed);
+  //get avatar from account and users
+  const user = users.find((user : Tuser) => user.userId === account.userId);
+  const avatar = user?.avatar || 'assets/images/user';
+
 
   const dispatch = useDispatch();
 
   const handlePostInput = () => {
     const postId = generateRandomId(9999, 9999999999);
     const userId = account.userId;
-    const avatar = account.avatar;
 
     dispatch(
       addToFeed({
         postId,
         userId,
-        name: "me",
-        avatar,
         timeStamp: new Date().getTime(),
         privacy: "Public",
         status: inputVal || "",
@@ -46,7 +48,7 @@ export default function PostInput() {
       <div className="_feed_inner_text_area  _b_radious6 _padd_b24 _padd_t24 _padd_r24 _padd_l24 _mar_b16">
         <div className="_feed_inner_text_area_box">
           <div className="_feed_inner_text_area_box_image">
-            <img src={account.avatar} alt="Image" className="_txt_img" />
+            <img src={avatar} alt="Image" className="_txt_img" />
           </div>
           <div className="form-floating _feed_inner_text_area_box_form ">
             <textarea

@@ -1,31 +1,128 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { TsingleCommentInfo, TsingleInnermostCommentInfo, TsingleLikeInfo, TsinglePostInfo } from '../components/main/middleLayout/Post'
+import { TsingleCommentInfo, TsingleInnermostCommentInfo, TsingleLikeInfo, TsinglePostInfo, Tuser } from '../components/main/middleLayout/Post'
 import { ClocalStorageFeedData } from '../utils/constants'
 
 export type Tfeed = {
     account : {
         userId: number,
-        name: string,
-        avatar: string,
         isLoggedIn : boolean,
     },
+    users : Tuser[],
     feed : TsinglePostInfo[]
 }
 
 let initialState = {
     account: {
         userId: 1,
-        name: 'Me',
-        avatar: 'assets/images/slider3.png',
         isLoggedIn : true,
     },
+    users : [
+        {
+            userId: 1,
+            name: 'Me',
+            avatar: 'assets/images/slider3.png',
+        },
+        {
+            userId: 2,
+            name: 'User2',
+            avatar: 'https://picsum.photos/40',
+        },
+        {
+            userId: 3,
+            name: 'User3',
+            avatar: 'https://picsum.photos/50',
+        },
+        {
+            userId: 4,
+            name: 'User4',
+            avatar: 'https://picsum.photos/60',
+        },
+        {
+            userId: 5,
+            name: 'User5',
+            avatar: 'https://picsum.photos/70',
+        },
+        {
+            userId: 6,
+            name: 'User6',
+            avatar: 'https://picsum.photos/80',
+        },
+        {
+            userId: 7,
+            name: 'User7',
+            avatar: 'https://picsum.photos/90',
+        },
+        {
+            userId: 8,
+            name: 'User8',
+            avatar: 'https://picsum.photos/100',
+        },
+        {
+            userId: 9,
+            name: 'User9',
+            avatar: 'https://picsum.photos/110',
+        },
+        {
+            userId: 10,
+            name: 'User10',
+            avatar: 'https://picsum.photos/120',
+        },
+        {
+            userId: 11,
+            name: 'User11',
+            avatar: 'https://picsum.photos/130',
+        },
+        {
+            userId: 12,
+            name: 'User12',
+            avatar: 'https://picsum.photos/140',
+        },
+        {
+            userId: 13,
+            name: 'User13',
+            avatar: 'https://picsum.photos/150',
+        },
+        {
+            userId: 14,
+            name: 'User14',
+            avatar: 'https://picsum.photos/160',
+        },
+        {
+            userId: 15,
+            name: 'User15',
+            avatar: 'https://picsum.photos/170',
+        },
+        {
+            userId: 16,
+            name: 'User16',
+            avatar: 'https://picsum.photos/180',
+        },
+        {
+            userId: 17,
+            name: 'User17',
+            avatar: 'https://picsum.photos/190',
+        },
+        {
+            userId: 18,
+            name: 'User18',
+            avatar: 'https://picsum.photos/200',
+        },
+        {
+            userId: 19,
+            name: 'User19',
+            avatar: 'https://picsum.photos/210',
+        },
+        {
+            userId: 20,
+            name: 'User20',
+            avatar: 'https://picsum.photos/220',
+        },
+    ],
     feed: [
         {
             postId: 1,
             userId: 1,
-            name:"me",
-            avatar:"https://picsum.photos/80",
             timeStamp:new Date().getTime()-5000,
             privacy:"Public",
             status:"Health tracker app",
@@ -34,17 +131,14 @@ let initialState = {
                 {
                     postId: 1,
                     userId: 2,
-                    avatar:"https://picsum.photos/200"
                 },
                 {
                     postId: 1,
                     userId: 3,
-                    avatar:"https://picsum.photos/100"
                 },
                 {
                     postId: 1,
                     userId: 4,
-                    avatar:"https://picsum.photos/300"
                 }
             ],
             shares: 3,
@@ -53,8 +147,6 @@ let initialState = {
                     postId: 1,
                     userId: 2,
                     commentId : 1,
-                    name:"other",
-                    avatar:"https://picsum.photos/200",
                     timeStamp:new Date().getTime()-4000,
                     comment:"This is a great app!",
                     likes: 5,
@@ -63,8 +155,6 @@ let initialState = {
                     postId: 1,
                     userId: 3,
                     commentId : 2,
-                    name:"another",
-                    avatar:"https://picsum.photos/100",
                     timeStamp:new Date().getTime()-3000,
                     comment:"I love it!",
                 },
@@ -73,8 +163,6 @@ let initialState = {
         {
             postId: 2,
             userId: 4,
-            name:"other",
-            avatar:"https://picsum.photos/200",
             timeStamp:new Date().getTime()-5000000,
             privacy:"Private",
             status:"Other status",
@@ -83,12 +171,10 @@ let initialState = {
                 {
                     postId: 2,
                     userId: 5,
-                    avatar:"https://picsum.photos/80"
                 },
                 {
                     postId: 2,
                     userId: 1,
-                    avatar:"assets/images/slider3.png"
                 }, 
             ],
             shares: 2,
@@ -97,8 +183,6 @@ let initialState = {
                     postId: 2,
                     userId: 5,
                     commentId : 1,
-                    name:"user5",
-                    avatar:"https://picsum.photos/80",
                     timeStamp:new Date().getTime()-4000,
                     comment:"I agree with you!",
                     likes: 3,
@@ -107,8 +191,6 @@ let initialState = {
                     postId: 2,
                     userId: 6,
                     commentId : 2,
-                    name:"another",
-                    avatar:"https://picsum.photos/100",
                     timeStamp:new Date().getTime()-3000,
                     comment:"Thank you!",
                 },
@@ -116,8 +198,6 @@ let initialState = {
                     postId: 2,
                     userId: 5,
                     commentId : 3,
-                    name:"user5",
-                    avatar:"https://picsum.photos/80",
                     timeStamp:new Date().getTime()-3000,
                     comment:"I'm glad to hear that!",
                     likes: 2,
@@ -127,8 +207,6 @@ let initialState = {
         {
             postId: 3,
             userId: 9,
-            name:"another",
-            avatar:"https://picsum.photos/100",
             timeStamp:new Date().getTime()-50000000,
             privacy:"Public",
             status:"Another status",
@@ -139,8 +217,6 @@ let initialState = {
         {
             postId: 4,
             userId: 1,
-            name:"me",
-            avatar:"assets/images/slider3.png",
             timeStamp:new Date().getTime()-500000000,
             privacy:"Private",
             status:"Last status",
@@ -149,57 +225,46 @@ let initialState = {
                 {
                     postId: 4,
                     userId: 13,
-                    avatar:"https://picsum.photos/200"
                 },
                 {
                     postId: 4,
                     userId: 14,
-                    avatar:"https://picsum.photos/100"
                 },
                 {
                     postId: 4,
                     userId: 15,
-                    avatar:"https://picsum.photos/50"
                 },
                 {
                     postId: 4,
                     userId: 16,
-                    avatar:"https://picsum.photos/60"
                 },
                 {
                     postId: 4,
                     userId: 17,
-                    avatar:"https://picsum.photos/70"
                 },
                 {
                     postId: 4,
                     userId: 18,
-                    avatar:"https://picsum.photos/80"
                 },
                 {
                     postId: 4,
                     userId: 19,
-                    avatar:"https://picsum.photos/90"
                 },
                 {
                     postId: 4,
                     userId: 20,
-                    avatar:"https://picsum.photos/100"
                 },
                 {
                     postId: 4,
                     userId: 21,
-                    avatar:"https://picsum.photos/110"
                 },
                 {
                     postId: 4,
                     userId: 22,
-                    avatar:"https://picsum.photos/120"   
                 },
                 {
                     postId: 4,
                     userId: 23,
-                    avatar:"https://picsum.photos/130"
                 }
             ],
             shares: 0,
@@ -208,8 +273,6 @@ let initialState = {
                     postId: 4,
                     userId: 13,
                     commentId: 3,
-                    name:"other",
-                    avatar:"https://picsum.photos/200",
                     timeStamp:new Date().getTime()-4000,
                     comment:"I agree with you!",
                     likes: 3,
@@ -219,8 +282,6 @@ let initialState = {
                             userId: 1,
                             commentId: 3,
                             innerMostCommentId : 1,
-                            name:"me",
-                            avatar:"assets/images/slider3.png",
                             timeStamp:new Date().getTime()-3000,
                             comment:"inner most comment with my id from redux store!",
                             likes: 3,
@@ -230,8 +291,6 @@ let initialState = {
                             userId: 14,
                             commentId: 3,
                             innerMostCommentId : 2,
-                            name:"another",
-                            avatar:"https://picsum.photos/100",
                             timeStamp:new Date().getTime()-3000,
                             comment:"inner most comment from redux store!",
                             likes: 2,
