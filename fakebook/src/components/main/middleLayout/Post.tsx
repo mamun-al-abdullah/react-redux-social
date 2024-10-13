@@ -38,7 +38,7 @@ export type TsingleCommentInfo = {
   commentId: number;
   timeStamp: number;
   comment: string;
-  likes?: number;
+  likes?: TsingleLikeInfo[];
   innerMostComments?: TsingleInnermostCommentInfo[];
   shares?: number;
 };
@@ -50,7 +50,7 @@ export type TsingleInnermostCommentInfo = {
   innerMostCommentId: number;
   timeStamp: number;
   comment: string;
-  likes?: number;
+  likes?: TsingleLikeInfo[];
 };
 
 export default function Post({
@@ -125,7 +125,7 @@ export default function Post({
         commentId: generateRandomId(999, 99999999),
         timeStamp: new Date().getTime(),
         comment: inputVal,
-        likes: 0,
+        likes: [],
         innerMostComments: [],
         shares: 0,
       })
@@ -142,7 +142,7 @@ export default function Post({
         innerMostCommentId: generateRandomId(999, 99999999),
         timeStamp: new Date().getTime(),
         comment: innermostInputVal,
-        likes: 0,
+        likes: [],
       })
     );
 
@@ -604,7 +604,7 @@ export default function Post({
                       </svg>
                     </span>
                   </div>
-                  <span className="_total">{lastComment.likes || 0}</span>
+                  <span className="_total">{lastComment.likes?.length || 0}</span>
                 </div>
                 <div className="_comment_reply">
                   <div className="_comment_reply_num">
@@ -699,7 +699,7 @@ export default function Post({
                             </span>
                           </div>
                           <span className="_total">
-                            {innerMostComment.likes || 0}
+                            {innerMostComment.likes?.length || 0}
                           </span>
                         </div>
                         <div className="_comment_reply">
